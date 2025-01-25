@@ -1,0 +1,205 @@
+part-a
+
+1. Create a new database named “Darshan”.
+	use Darshan
+
+2. Create another new database named “DIET”.
+	use DIET
+
+3. List all databases.
+	show databases	
+
+4. Check the current database.
+	db
+
+5. Drop “DIET” database.
+	db.dropDatabase()
+
+6. Create a collection named “Student” in the “Darshan” database.
+	 use Darshan
+	db.createCollection('Student')
+
+7. Create a collection named “Department” in the “Darshan” database.
+	db.createCollection('Department')
+
+8. List all collections in the “Darshan” database.
+	show collections
+
+9. Insert a single document using insertOne into “Department” collection. (Dname:’CE’, HOD:’Patel’)
+	db.Department.insertOne({Dname:'CE', HOD:'Patel'})
+
+10. Insert two document using insertMany into “Department” collection. (Dname:’IT’ and Dname:’ICT’)
+	db.Department.insertOne({Dname:'CE', HOD:'Patel'})
+
+11. Drop a collection named “Department” from the “Darshan” database.
+	db.dropCollection
+
+12. Insert a single document using insertOne into “Student” collection.
+(Fields are Name, City, Branch, Semester, Age) Insert your own data.
+	db.Student.insertOne({Name:'abc', City:'Surat', Branch:'CS', Semester:4, Age:19})
+
+13. Insert three documents using insertMany into “Student” collection.
+(Fields are Name, City, Branch, Semester, Age) Insert your three friend’s data.
+	db.Student.insertMany([{Name:'abc', City:'Surat', Branch:'CS', Semester:4, Age:19},
+                       {Name:'def', City:'Ahmedabad', Branch:'IT', Semester:5, Age:18},
+			{Name:'ghi', City:'Morbi', Branch:'IT', Semester:5, Age:19}])
+
+14. Check whether “Student” collection exists or not.
+	db.getCollectionNames().includes('Student')
+
+15. Check the stats of “Student” collection.
+	db.Student.stats()
+
+16. Drop the “Student” collection.
+	db.Student.drop()
+
+17. Create a collection named “Deposit”.
+	use Deposit
+
+18. Insert following data in to “Deposit” collection.
+
+19. Display all the documents of “Deposit” collection.
+	db.Deposit.find()
+
+20. Drop the “Deposit” collection.
+	db.Deposit.drop()
+
+Part – B
+1. Create a new database named “Computer”.
+    use computer
+
+2. Create a collection named “Faculty” in the “Computer” database.
+    db.createCollection("Faculty")
+
+3. Insert a below document using insertOne into “Faculty” collection
+FID FNAME BNAME SALARY JDATE
+1 ANIL CE 10000 1-3-95
+    db.Faculty.insertOne({})
+
+4. Insert below documents using insertMany into “Faculty” collection. 
+    db.Faculty.insertMany([{},{}..])
+
+
+Part – C (Perform following operation using UI)
+1. Create a new database named “Computer”.
+
+2. Create a collection named “Faculty” in the “Computer” database.
+
+3. Insert a below documents into “Faculty” collection. 
+
+4. Display all the documents of “Faculty” collection.
+
+5. Drop the “Faculty” collection.
+
+6. Drop the “Computer” database.
+
+
+--LAB-9
+
+Part-A
+1. Retrieve/Display every document of Deposit collection.
+	db.Deposit.find().forEach(printjson())
+
+2. Display only one document of Deposit collection. (Use: findOne())
+	db.Deposit.findOne()
+
+3. Insert following document into Deposit collection. (Use: insertOne())
+109 KIRTI VIRAR 3000 3-5-97
+	db.Deposit.insertOne({})
+
+4. Insert following documents into Deposit collection. (Use: insertMany())
+110 MITALI ANDHERI 4500 4-9-95
+111 RAJIV NEHRU PLACE 7000 2-10-98
+	db.Deposit.insertMany([{},{}])
+
+5. Display all the documents of ‘VIRAR’ branch from Deposit collection.
+	db.Deposit.find({Branch:'VIRAR'})
+
+6. Display all the documents of Deposit collection whose amount is between 3000 and 5000.
+	find({AMOUNT : {$gt:2000,$lt:5000}})
+
+7. Display all the documents of Deposit collection whose amount is greater than 2000 and branch is VIRAR.
+	find({AMOUNT : {$gt:2000}, BNAME:'VIRAR'})
+
+8. Display all the documents with CNAME, BNAME and AMOUNT fields from Deposit collection.
+	FIND({age: {$IN:[25,30,35]}})
+	FIND({},{cname:1,bname:1,_id=0})
+
+9. Display all the documents of Deposit collection on ascending order by CNAME.
+	find({bname:'virat'},{	cname:1,bname:1,_id=0})
+
+10. Display all the documents of Deposit collection on descending order by BNAME.
+	find().sort({Cname:1})
+
+11. Display all the documents of Deposit collection on ascending order by ACTNO and descending order by
+AMOUNT.
+
+
+12. Display only two documents of Deposit collection.
+	find().limit(2)
+13. Display 3rd document of Deposit collection.
+	find().skip(2).limit(1)
+
+14. Display 6th and 7th documents of Deposit collection.
+
+
+15. Display the count of documents in Deposit collection. 
+
+Part- B
+1. Insert following documents into “Student” collection. (Use: insertMany())
+{ "_id": 1, "name": "John", "age": 30, "city": "New York", "isActive": true }
+{ "_id": 2, "name": "Jane", "age": 25, "city": "Los Angeles", "isActive": false }
+{ "_id": 3, "name": "Tom", "age": 35, "city": "Chicago", "isActive": true }
+{ "_id": 4, "name": "Lucy", "age": 28, "city": "San Francisco", "isActive": true }
+{ "_id": 5, "name": "David", "age": 40, "city": "Miami", "isActive": false }
+{ "_id": 6, "name": "Eva", "age": 23, "city": "Boston", "isActive": true }
+{ "_id": 7, "name": "Nick", "age": 38, "city": "Seattle", "isActive": false }
+{ "_id": 8, "name": "Sophia", "age": 27, "city": "New York", "isActive": true }
+{ "_id": 9, "name": "Liam", "age": 32, "city": "Los Angeles", "isActive": false }
+{ "_id": 10, "name": "Olivia", "age": 29, "city": "San Diego", "isActive": true }
+
+2. Display all documents of "Student" collection.
+
+3. Display all documents of "Student" collection whose age is 30.
+
+4. Display all documents of "Student" collection whose age is greater than 25.
+
+5. Display all documents of "Student" collection whose name is "John" and age is 30.
+
+6. Display all documents of "Student" collection whose age is not equal to 25.
+
+
+7. Display all documents of "Student" collection whose age is equal to 25 or 30 or 35. (using $or as well
+as using $in).
+
+
+8. Display all documents of "Student" collection whose name is "John" or age is 30.
+
+
+9. Display all documents of "Student" collection whose name is "John" and city is New York.
+
+
+10. Display name and age of students from "Student" collection whose name is "John" and city is New York.
+
+
+Part – C
+1. Display name of students from "Student" collection whose age is between to 25 and 35 and sort output
+by age in ascending order.
+
+2. Display all documents of "Student" collection and sort all the documents by name in ascending order
+and then by age in descending.
+
+
+3. Display first five documents of "Student" collection.
+
+
+4. Display fourth and fifth documents of "Student" collection.
+
+
+5. Display the name of oldest student from "Student" collection.
+
+
+6. Display all documents of "Student" collection in such a way that skip the first 2 documents and return
+the rest documents.
+
+

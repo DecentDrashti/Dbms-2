@@ -106,7 +106,7 @@ select *from person
 	 end
 	 pr_designation_update 1,'admin'
 
-	 --person // baki
+	 --person 
 	  create or alter procedure pr_person_update 
 	 @id int,
 	 @fname varchar(50),
@@ -118,13 +118,13 @@ select *from person
 	 as
 	 begin
 	   update person
-	   set firstname=@fname,
+	   set PersonID=@id,
+	   FirstName=@fname,
 	   LastName=@lname
 	   ,Salary=@salary
 	   ,JoiningDate=@joiningdate
 	   ,DepartmentID=@departmentid
-	   ,designationid=@designationid
-	        
+	   ,designationid=@designationid  
 	   where personid=@id
 	 end
 
@@ -158,8 +158,7 @@ select *from person
 	   where departmentId = @id
 	 end
 	 pr_department_select_by_id 1
---3. Department, Designation & Person Table’s (If foreign key is available then do write join and take 
---columns on select list)
+--3. Department, Designation & Person Table’s (If foreign key is available then do write join and take columns on select list)
 	select *from department join person
 	on department.departmentid=person.departmentid
 	join designation
