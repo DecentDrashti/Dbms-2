@@ -1,3 +1,4 @@
+--nava ma 5 th ma khali insert j che
 --Part – A
 -- Creating PersonInfo Table
 CREATE TABLE PersonInfo (
@@ -40,7 +41,7 @@ CREATE TABLE PersonLog (
 		insert into PersonLog
 		values(@personId,@personName,'insert',GETDATE());
 	END
-	insert into PersonInfo values(102,'dr','80000','1995-10-8','rajkot',2,'1975-10-8');
+	insert into PersonInfo values(105,'drashti','80000',null,'rajkot',2,'1975-10-8');
 
 	Update PersonInfo
 	set BirthDate='2005-08-23'
@@ -149,8 +150,38 @@ CREATE TABLE PersonLog (
 			where BirthDate=@birthdate
 	END
 --8. Create a Trigger to Limit Salary Decrease by a 10%.
+--e 10% thi jaju decrement karse to aa trigger fire thase ne pachi original salary muki dese
+	create or alter trigger tr_person_LimitSalarydecreases
+	on PersonInfo
+	After Update
+	As
+	Begin
+	Declare @oldsalary decimal(8,2) ,@newSalary decimal(8,2),@id int;
+	select @oldsalary=salary from deleted
+	select @newSalary=salary from inserted
+
+	if @newSalary<@oldsalary*0.9 --aa equation che 10% no
+	begin
+		Update PersonInfo
+		SET salary =@oldsalary
+		where PersonID=@id
+	end
+end
 --Part – C 
---9. Create Trigger to Automatically Update JoiningDate to Current Date on INSERT if JoiningDate is NULL 
---during an INSERT.
---10. Create DELETE trigger on PersonLog table, when we delete any record of PersonLog table it prints 
---‘Record deleted successfully from PersonLog’.
+--9. Create Trigger to Automatically Update JoiningDate to Current Date on INSERT if JoiningDate is NULL during an INSERT.
+	create or alter Trigger tr_After_insert_JoiningDate
+	on personinfo
+	After Insert
+	As
+	begin
+	declare @jd date,@id int
+	select @jd=JoiningDate from inserted 
+	if @jd=null
+	begin
+		Update PersonInfo
+		SET JoiningDate =GETDATE()
+		where PersonID=@id
+	end
+end
+--10. Create DELETE trigger on PersonLog table, when we delete any record of PersonLog table it prints ‘Record deleted successfully from PersonLog’.
+create or alter trigger tr_
