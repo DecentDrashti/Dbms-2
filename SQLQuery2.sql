@@ -158,6 +158,7 @@ select *from person
 	   where departmentId = @id
 	 end
 	 pr_department_select_by_id 1
+
 --3. Department, Designation & Person Table’s (If foreign key is available then do write join and take columns on select list)
 	select *from department join person
 	on department.departmentid=person.departmentid
@@ -174,8 +175,22 @@ select *from person
 
 --Part – B
 --5. Create a Procedure that takes the department name as input and returns a table with all workers working in that department.
-	create or alter procedure pr_department_
+	create or alter procedure pr_department_name
+	@nme varchar(50)
+	as
+	begin
+		select * from department
+		where DepartmentName=@nme
+		
+	end
+	exec pr_department_name 'HR'
+
 --6. Create Procedure that takes department name & designation name as input and returns a table with worker’s first name, salary, joining date & department name.
+	create or alter procedure pr_departmentname_designationname
+	@dep_name varchar(50),
+	@des_name varchar(50)
+	as
+	begin
 --7. Create a Procedure that takes the first name as an input parameter and display all the details of the worker with their department & designation name.
 --8. Create Procedure which displays department wise maximum, minimum & total salaries.
 --9. Create Procedure which displays designation wise average & total salaries.
