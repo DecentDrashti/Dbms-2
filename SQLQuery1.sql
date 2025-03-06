@@ -125,6 +125,7 @@ SELECT * FROM SONGS
     select count(song_id)as total_song,genre from songs 
 	group by genre
 	having count(genre)>2
+
 --26. List all artists who have albums that contain more than 3 songs.
     select artist_name from Artists join Albums 
 	on artists.Artist_id=albums.Artist_id
