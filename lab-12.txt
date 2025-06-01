@@ -24,7 +24,7 @@ lab-12
 8. Display city wise maximum and minimum fees.
 	db.Student.aggregate([{$group:{_id:"$CITY",MaxOfFees:{$max:"$FEES"},MinOfFees:{$min:"$FEES"}}},{$project:{_id:0,MaxOfFees:1,MinOfFees:1}}])
 
-9. Display count of persons lives in Baroda city in your collection.
+9. Display count of persons lives in Baroda city in your collection
 	db.Student.aggregate([{$match:{CITY:"Baroda"}},{$group:{_id:"$CITY",count:{$sum:1}}},{$project:{_id:0,city:"_id",count:1}}])
 
 10. Display average fees of Rajkot city.
