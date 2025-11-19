@@ -1,0 +1,146 @@
+-- Create Customers Table
+CREATE TABLE Customers (
+    CustomerID INT PRIMARY KEY IDENTITY(1,1),
+    Name VARCHAR(50) NOT NULL,
+    JoinDate DATE NOT NULL
+);
+
+-- Create Products Table
+CREATE TABLE Products (
+    ProductID INT PRIMARY KEY IDENTITY(1,1),
+    ProductName VARCHAR(100) NOT NULL,
+    Category VARCHAR(50),
+    Price DECIMAL(10,2) NOT NULL,
+    StockQuantity INT NOT NULL
+);
+
+-- Create Orders Table
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY IDENTITY(1,1),
+    CustomerID INT FOREIGN KEY REFERENCES Customers(CustomerID),
+    ProductID INT FOREIGN KEY REFERENCES Products(ProductID),
+    OrderDate DATE NOT NULL,
+    Quantity INT NOT NULL,
+    Price DECIMAL(10,2) NOT NULL, -- Price at time of order
+    TotalOrderAmount DECIMAL(10,2) NOT NULL,
+    OrderStatus VARCHAR(20) CHECK (OrderStatus IN ('Pending', 'Shipped', 'Delivered', 'Cancelled'))
+);
+
+-- Insert Sample Customers
+INSERT INTO Customers (Name, JoinDate) VALUES
+('Arun Kumar', '2023-01-10'),
+('Bhavna Gupta', '2023-01-10'), -- Q9: Same JoinDate
+('Chetan Shah', '2023-02-15'),
+('Divya Iyer', '2023-03-20'),
+('Elina Dsouza', '2023-04-05'),
+('Farhan Malik', '2023-05-12'),
+('Gita Verma', '2024-01-20'),   -- Q3: First order in 2024
+('Harish Reddy', '2024-06-01'); -- Q1: No orders
+
+-- Insert Sample Products
+INSERT INTO Products (ProductName, Category, Price, StockQuantity) VALUES
+('Laptop', 'Electronics', 1200.00, 10), -- 2nd Highest Price
+('Smartphone', 'Electronics', 1000.00, 20),
+('Wireless Mouse', 'Electronics', 25.00, 50), -- Q2: Ordered by 6 customers
+('Coffee Maker', 'Appliances', 80.00, 30),
+('Gaming PC', 'Electronics', 1500.00, 5),  -- Highest Price
+('Desk Chair', 'Furniture', 150.00, 15),
+('Old Model TV', 'Electronics', 300.00, 0),  -- Q6: Out of stock
+('Blender', 'Appliances', 45.00, 0); -- Never ordered, out of stock
+
+-- Insert Sample Orders
+-- Assume current date is 2025-11-17
+INSERT INTO Orders (CustomerID, ProductID, OrderDate, Quantity, Price, TotalOrderAmount, OrderStatus) VALUES
+-- Q2: Wireless Mouse (ProductID 3) ordered by 6 customers
+(1, 3, '2024-02-10', 1, 25.00, 25.00, 'Delivered'),
+(2, 3, '2024-03-15', 2, 25.00, 50.00, 'Delivered'),
+(3, 3, '2024-04-01', 1, 25.00, 25.00, 'Delivered'),
+(4, 3, '2024-05-10', 1, 25.00, 25.00, 'Shipped'),
+(5, 3, '2024-06-15', 1, 25.00, 25.00, 'Pending'),
+(6, 3, '2024-07-01', 1, 25.00, 25.00, 'Delivered'),
+
+-- Q3: Gita (Cust 7) first order in 2024
+(7, 4, '2024-02-20', 1, 80.00, 80.00, 'Delivered'),
+(7, 2, '2024-05-25', 1, 1000.00, 1000.00, 'Shipped'), -- Q7: Multiple categories
+
+-- Q3: Arun (Cust 1) first order in 2024, but also has 2025 order
+(1, 1, '2024-01-15', 1, 1200.00, 1200.00, 'Delivered'), -- Q3: First order
+(1, 5, '2025-01-20', 1, 1500.00, 1500.00, 'Delivered'), -- Q5: Latest order
+(1, 4, '2024-11-30', 1, 80.00, 80.00, 'Delivered'), -- Q7: Multiple categories
+
+-- Q6: Old Model TV (ProductID 7) ordered but stock is 0
+(2, 7, '2024-03-18', 1, 300.00, 300.00, 'Delivered'),
+
+-- Q8: No orders in last 6 months (i.e., after 2025-05-17)
+(3, 6, '2025-01-10', 1, 150.00, 150.00, 'Delivered'), -- This order is old
+
+-- Q4: Top revenue products (Laptop, Smartphone, Gaming PC)
+(4, 2, '2025-02-01', 2, 1000.00, 2000.00, 'Delivered'),
+(5, 5, '2025-02-15', 1, 1500.00, 1500.00, 'Shipped'),
+(6, 1, '2025-03-01', 1, 1200.00, 1200.00, 'Delivered');
+
+
+--1. List customers who have never placed any order.
+select * from customers where CustomerID Not In (select CustomerID from Orders)
+
+--2.  List products ordered by more than 5 different customers.
+ SELECT 
+  ProductName, COUNT(DISTINCT CustomerID) as counted
+FROM 
+    Orders join Products 
+on
+	orders.productid=products.productid
+GROUP BY 
+    Products.ProductName
+HAVING 
+    COUNT(DISTINCT CustomerID) > 5;
+ 
+ --3.List customers whose first order was placed in 2024.
+SELECT 
+    c.name,
+    MIN(o.orderdate) AS first_order_date
+FROM 
+    Customers c
+JOIN 
+    Orders o ON c.customerid = o.customerid
+GROUP BY 
+    c.name
+HAVING 
+    YEAR(MIN(o.orderdate)) = 2024;
+
+--4. List top 3 products with the highest total revenue.
+SELECT top 3
+    p.productname,
+    SUM(o.quantity * o.price) AS total_revenue
+FROM 
+    Orders o
+JOIN 
+    Products p ON o.productid = p.productid
+GROUP BY 
+    p.productname
+ORDER BY 
+    total_revenue desc 
+
+--5. Find the latest order placed for each customer.
+SELECT 
+    c.name,
+    MAX(o.orderdate) AS latest_order_date
+FROM 
+    Customers c
+JOIN 
+    Orders o ON c.customerid = o.customerid
+GROUP BY 
+    c.Name;
+
+--6.List products that have been ordered but are currently out of stock.
+SELECT 
+    p.productname 
+FROM 
+    Products p
+JOIN 
+    Orders o ON p.productid = o.productid
+WHERE 
+    p.stockquantity = 0
+GROUP BY 
+    p.productname;
+
